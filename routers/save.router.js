@@ -1,22 +1,26 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const { processWordHandler,deleteWordHandler } = require('../controllers/savef.controller.js');
+const save = require('../controllers/save.controller.js');
+const {
+    renameFile,
+    deleteFile
+ 
+  } = require("../controllers/save.controller.js");
 
-const savefRouter = express.Router();
+const Saverouter = express.Router();
 
-const upload1 = multer({
-    dest: path.join(__dirname, '../uploads11') // Directory where uploaded files will be stored temporarily
+// Set up multer for file uploads
+const upload = multer({
+    dest: path.join(__dirname, '../temp')
 });
 
+// Define the route for file upload
+Saverouter.post('/upload', upload.single('file'), renameFile);
+
+// Define the route for file deletion
+Saverouter.delete('/delete', deleteFile);
+
+module.exports = Saverouter;
 
     
-
-
-
-
-
-savefRouter.post('/word', upload1.single('file'), processWordHandler);
-savefRouter.delete('/deleteword', deleteWordHandler);
-
-module.exports = savefRouter;

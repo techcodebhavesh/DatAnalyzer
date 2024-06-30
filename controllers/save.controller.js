@@ -1,12 +1,16 @@
 const path = require('path');
 const fs = require('fs');
 
-// Define the destination folder for uploaded files
-const uploadDestination = path.join(__dirname, 'D:/downloadsD/Data_Analyze_SQL-Packet/csv');
+const uploadDestination = 'D:/downloadsD/Data_Analyze_SQL-Packet/csv';
 
 // Ensure the upload directory exists
 if (!fs.existsSync(uploadDestination)) {
-    fs.mkdirSync(uploadDestination);
+    try {
+        fs.mkdirSync(uploadDestination, { recursive: true });
+        console.log('Upload directory created:', uploadDestination);
+    } catch (err) {
+        console.error('Error creating upload directory:', err);
+    }
 }
 
 const renameFile = (req, res) => {
@@ -26,6 +30,7 @@ const renameFile = (req, res) => {
         res.send('File uploaded and renamed to test.csv successfully.');
     });
 };
+
 const deleteFile = (req, res) => {
     const filePath = path.join(uploadDestination, 'test.csv');
 
@@ -46,4 +51,3 @@ const deleteFile = (req, res) => {
 };
 
 module.exports = { renameFile, deleteFile };
-
