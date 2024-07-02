@@ -4,7 +4,6 @@ import '../../App.js';
 function Submit() {
   const [csvFile, setCsvFile] = useState(null);
   const [prompt, setPrompt] = useState('');
-  const [responseType, setResponseType] = useState('');
   const [responseValue, setResponseValue] = useState('');
 
   const handleFileChange = (e) => {
@@ -28,11 +27,13 @@ function Submit() {
 
         if (response.ok) {
           console.log('CSV file uploaded successfully');
-          // Add further handling logic for successful upload here
+          alert('CSV file uploaded successfully');
         } else {
+          alert('Failed to upload CSV file');
           console.error('Failed to upload CSV file');
         }
       } catch (error) {
+        alert('Error uploading CSV file');
         console.error('Error uploading CSV file:', error);
       }
     } else {
@@ -56,9 +57,7 @@ function Submit() {
         if (response.ok) {
           const data = await response.json();
           console.log('Prompt response:', data);
-          setResponseType(data.type); // Set response type
           setResponseValue(data.value); // Set response value
-          // Add further handling logic for prompt response here
         } else {
           console.error('Failed to send prompt');
         }
@@ -70,28 +69,16 @@ function Submit() {
     }
   };
 
-  // Render function for different response types
   const renderResponse = () => {
-    if (responseType === 'string') {
-      return (
-        <div className="response-container">
-          <h3>Text Response:</h3>
-          <p>{responseValue}</p>
-        </div>
-      );
-    } else if (responseType === 'plot') {
-      // Replace 'path_to_image' with the actual path where your image is located
-      const imagePath = 'D:/downloadsD/Data_Analyze_SQL-Packet/exports/charts/temp_chart.png'; // Example path
-
-      return (
-        <div className="response-container">
-          <h3>Image Response:</h3>
-          <img src={imagePath} alt="Response Image" className="response-image" />
-        </div>
-      );
-    } else {
-      return null; // Handle other types or no response
-    }
+    const imagePath = 'D:/downloadsD/Data_Analyze_SQL-Packet/exports/charts/temp_chart.png';
+    return (
+      <div className="response-container">
+        <h3>Text Response:</h3>
+        <p>{responseValue}</p>
+        <h3>Image Response:</h3>
+        <img src={imagePath} alt="Response Image" className="response-image" />
+      </div>
+    );
   };
 
   return (
@@ -123,7 +110,7 @@ function Submit() {
         </div>
       </div>
 
-      {/* Render response based on type */}
+      {/* Render response */}
       {renderResponse()}
     </div>
   );

@@ -3,9 +3,13 @@ from app import app
 from app.controllers import process_prompt
 
 
+
+
+
 @app.route('/chat', methods=['POST'])
 def chat():
     prompt = request.json.get('prompt')
+    print(prompt)
     if not prompt:
         return jsonify({"error": "No prompt provided"}), 400
 
