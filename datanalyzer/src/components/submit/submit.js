@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import '../../App.js';
+import './Submit.css'; // Import your CSS file for styling
 
 function Submit() {
   const [csvFile, setCsvFile] = useState(null);
   const [prompt, setPrompt] = useState('');
   const [responseValue, setResponseValue] = useState('');
+  const [latestImageUrl, setLatestImageUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   const handleFileChange = (e) => {
     setCsvFile(e.target.files[0]);
@@ -20,6 +23,7 @@ function Submit() {
       formData.append('file', csvFile);
 
       try {
+        setIsLoading(true); // Start loading
         const response = await fetch('http://localhost:5003/files/upload', {
           method: 'POST',
           body: formData,
@@ -35,6 +39,8 @@ function Submit() {
       } catch (error) {
         alert('Error uploading CSV file');
         console.error('Error uploading CSV file:', error);
+      } finally {
+        setIsLoading(false); // Stop loading
       }
     } else {
       alert('Please upload a CSV file.');
@@ -43,6 +49,7 @@ function Submit() {
 
   const handlePromptSubmit = async () => {
     if (prompt) {
+      setIsLoading(true); // Start loading
       console.log('Sending prompt:', prompt);
 
       try {
@@ -57,12 +64,15 @@ function Submit() {
         if (response.ok) {
           const data = await response.json();
           console.log('Prompt response:', data);
-          setResponseValue(data.value); // Set response value
+          setResponseValue(data.response); // Set response value
+          setLatestImageUrl(data.latest_image_url); // Set latest image URL
         } else {
           console.error('Failed to send prompt');
         }
       } catch (error) {
         console.error('Error sending prompt:', error);
+      } finally {
+        setIsLoading(false); // Stop loading
       }
     } else {
       alert('Please enter a prompt.');
@@ -70,15 +80,22 @@ function Submit() {
   };
 
   const renderResponse = () => {
-    const imagePath = 'D:/downloadsD/Data_Analyze_SQL-Packet/exports/charts/temp_chart.png';
-    return (
-      <div className="response-container">
-        <h3>Text Response:</h3>
-        <p>{responseValue}</p>
-        <h3>Image Response:</h3>
-        <img src={imagePath} alt="Response Image" className="response-image" />
-      </div>
-    );
+    if (isLoading) {
+      return <p>Loading...</p>; // Show loading indicator
+    } else {
+      return (
+        <div className="response-container">
+          <h3>Text Response:</h3>
+          <p>{responseValue}</p>
+          {latestImageUrl && (
+            <div className="image-response">
+              <h3>Image Response:</h3>
+              <img src={latestImageUrl} alt="Response Image" className="response-image" />
+            </div>
+          )}
+        </div>
+      );
+    }
   };
 
   return (
