@@ -1,0 +1,13 @@
+version: '2'
+authtoken: "2hroFDagsTkzPJ7XCxTIqP2MFKg_2BkHRYUxFbXtezjvkujn2"
+
+tunnels:
+  react-app:
+    proto: http
+    addr: 3000
+  flask-server:
+    proto: http
+    addr: 5000
+  nodee-server:
+    proto: http
+    addr: 5003
