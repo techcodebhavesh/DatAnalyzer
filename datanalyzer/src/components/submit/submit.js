@@ -23,7 +23,7 @@ function Submit() {
 
       try {
         setIsLoading(true); // Start loading
-        const response = await fetch('https://24fb-2401-4900-1c8f-ee63-2d49-5f6-e22f-1bc6.ngrok-free.app/files/upload', {
+        const response = await fetch('http://localhost:5003/files/upload', {
           method: 'POST',
           body: formData,
         });
@@ -52,7 +52,7 @@ function Submit() {
       console.log('Sending prompt:', prompt);
 
       try {
-        const response = await fetch('https://9a84-2401-4900-1c8f-ee63-2d49-5f6-e22f-1bc6.ngrok-free.app/chat', {
+        const response = await fetch('http://localhost:5000/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

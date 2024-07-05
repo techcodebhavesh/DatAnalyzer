@@ -4,16 +4,21 @@ from langchain_groq.chat_models import ChatGroq
 import os
 from firebase_config import bucket
 
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 # Format pandas numbers
 pd.options.display.float_format = '{:,.0f}'.format
 
 # Load the data
-df = pd.read_csv("student.csv")
+df = pd.read_csv("D:/downloadsD/Data_Analyze_SQL-Packet/csv/test.csv")
 
 # Initialize the LLM and SmartDataframe
 llm = ChatGroq(
     model_name="llama3-8b-8192",
-    api_key="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"
+    api_key=os.getenv("API_KEY")
 )
 df_llm = SmartDataframe(df, config={
     "llm": llm,
